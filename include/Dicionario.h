@@ -11,15 +11,11 @@ class Dicionario
 public:
     Dicionario();
     ~Dicionario();
-    void Limpa();
 
     int EncontraNoDicionario(string chave);
     void InsereNoDicionario(string chave, int index);
-    void Remove(string chave);
-    
-
+  
     Node *raiz; 
-
 };
 
 #endif

@@ -4,15 +4,12 @@ using namespace std;
 
 Dicionario::Dicionario()
 {
-    raiz = new Node(0);
+    raiz = new Node(-1);
 }
 
 Dicionario::~Dicionario()
 {
-}
-
-void Dicionario::Limpa()
-{
+    delete raiz;
 }
 
 int Dicionario::EncontraNoDicionario(string chave)
@@ -23,8 +20,4 @@ int Dicionario::EncontraNoDicionario(string chave)
 void Dicionario::InsereNoDicionario(string chave, int index)
 {
     raiz->InsereRecursivo(chave, index);
-}
-
-void Dicionario::Remove(string chave)
-{
 }

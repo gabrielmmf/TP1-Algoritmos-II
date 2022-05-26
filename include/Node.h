@@ -17,7 +17,6 @@ public:
 
 private:
     int index;
-    char chave;
     Node *Filhos[TAMANHO_ALFABETO];
     friend class Dicionario;
 };

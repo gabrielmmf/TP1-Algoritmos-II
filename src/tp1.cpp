@@ -3,6 +3,7 @@
 #include <fstream>
 #include <streambuf>
 #include <Dicionario.h>
+#include <vector>
 
 using namespace std;
 
@@ -10,60 +11,94 @@ void Compressao(string entrada, string saida)
 {
     Dicionario dicionario;
     string texto = "";
-    char aux;
     string string_atual = "";
+    dicionario.InsereNoDicionario(string_atual, 0);
+
     ifstream file(entrada);
+    ofstream output(saida);
     if (file.is_open())
     {
         while (file)
         {
-            aux = file.get();
-            texto += aux;
+            texto += file.get();
         }
     }
 
-    for (int i = 0; i < int(texto.size()) - 1; i++)
+    int iterador_indice = 1;
+    int indice_atual = 0;
+
+    for (int i = 0; i < int(texto.size() - 1); i++)
     {
         string_atual += texto[i];
-        // if(dicionario.EstaNoDicionario(string_atual))
-        cout << texto[i];
-    }
-    string pesquisa;
-    cout << "Inserindo abobora no dicionario: " << endl;
-    dicionario.InsereNoDicionario("abobora", 1);
-    cout << "Inserindo macaco no dicionario: " << endl;
-    dicionario.InsereNoDicionario("macaco", 2);
-    cout << "Inserindo forte no dicionario: " << endl;
-    dicionario.InsereNoDicionario("forte", 3);
-    cout << "Inserindo fraco no dicionario: " << endl;
-    dicionario.InsereNoDicionario("fraco", 4);
-    cout << "Inserindo marcos no dicionario: " << endl;
-    dicionario.InsereNoDicionario("marcos", 5);
-    cout << "Inserindo menta no dicionario: " << endl;
-    dicionario.InsereNoDicionario("menta", 6);
-    cout << "Inserindo feio no dicionario: " << endl;
-    dicionario.InsereNoDicionario("feio", 7);
-    cout << "Inserindo bonito no dicionario: " << endl;
-    dicionario.InsereNoDicionario("bonito", 8);
-
-    while (true)
-    {
-        cout << "Digite a pesquisa no dicionario: " << endl;
-        cin >> pesquisa;
-
-        if (dicionario.EncontraNoDicionario(pesquisa) != -1)
+        indice_atual = dicionario.EncontraNoDicionario(string_atual);
+        if (indice_atual == -1)
         {
-            cout << "A palavra " << pesquisa << " esta no dicionario no indice " << dicionario.EncontraNoDicionario(pesquisa) << endl;
+            output << "("
+                   << dicionario.EncontraNoDicionario(string_atual.substr(0, string_atual.length() - 1)) << "," << string_atual.substr(string_atual.length() - 1, string_atual.length()) << ")";
+            dicionario.InsereNoDicionario(string_atual, iterador_indice);
+
+            string_atual = "";
+            iterador_indice++;
         }
         else
         {
-            cout << "A palavra " << pesquisa << " nao esta no dicionario" << endl;
+            if (i == int(texto.size() - 2))
+            {
+                output << "(" << indice_atual << ","
+                       << ""
+                       << ")";
+            }
         }
     }
 }
 
 void Descompressao(string entrada, string saida)
 {
+    string texto = "";
+    string string_atual = "";
+    string string_descomprimida = "";
+    vector<string> strings;
+    strings.push_back(string_atual);
+
+    ifstream file(entrada);
+    ofstream output(saida);
+    if (file.is_open())
+    {
+        while (file)
+        {
+            texto += file.get();
+        }
+    }
+
+    int aux = 0;
+    for (int i = 0; i < int(texto.size() - 1); i++)
+    {
+        if (texto[i] == '('){
+            i++;
+            string_atual = "";
+            while(texto[i]!= ','){
+                string_atual += texto[i];
+                i++;
+            }
+
+            aux = stoi(string_atual);
+
+            cout << aux << endl;
+            string_atual = "";
+            i++;
+            while(texto[i]!= ')'){
+                string_atual += texto[i];
+                i++;
+            }
+            
+            
+            string_descomprimida += strings[aux]+string_atual;
+
+            strings.push_back(strings[aux]+string_atual);
+            
+        }
+    }
+    output << string_descomprimida;
 }
 
 int main(int argc, char *argv[])
