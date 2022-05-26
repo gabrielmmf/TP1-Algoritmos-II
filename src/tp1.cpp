@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string.h>
 #include <fstream>
-#include <streambuf>
 #include <Dicionario.h>
 #include <vector>
 
@@ -73,29 +72,27 @@ void Descompressao(string entrada, string saida)
     int aux = 0;
     for (int i = 0; i < int(texto.size() - 1); i++)
     {
-        if (texto[i] == '('){
+        if (texto[i] == '(')
+        {
             i++;
             string_atual = "";
-            while(texto[i]!= ','){
+            while (texto[i] != ',')
+            {
                 string_atual += texto[i];
                 i++;
             }
-
             aux = stoi(string_atual);
-
-            cout << aux << endl;
             string_atual = "";
             i++;
-            while(texto[i]!= ')'){
+            while (texto[i] != ')')
+            {
                 string_atual += texto[i];
                 i++;
             }
-            
-            
-            string_descomprimida += strings[aux]+string_atual;
 
-            strings.push_back(strings[aux]+string_atual);
-            
+            string_descomprimida += strings[aux] + string_atual;
+
+            strings.push_back(strings[aux] + string_atual);
         }
     }
     output << string_descomprimida;
@@ -103,9 +100,6 @@ void Descompressao(string entrada, string saida)
 
 int main(int argc, char *argv[])
 {
-    for (int i = 0; i < argc; ++i)
-        cout << "Argumanto " << i << ": " << argv[i] << "\n";
-
     if (strcmp(argv[1], "-c") == 0 or strcmp(argv[1], "-x") == 0)
     {
         string entrada = argv[2];
@@ -118,8 +112,6 @@ int main(int argc, char *argv[])
             }
         }
 
-        cout << "entrada: " << entrada << endl
-             << "saida: " << saida << endl;
         if (strcmp(argv[1], "-c") == 0)
         {
             Compressao(entrada, saida);
